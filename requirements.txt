@@ -6,3 +6,4 @@ tox
 nptyping
 coverage
 mypy
+codecov
