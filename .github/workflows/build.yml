@@ -1,4 +1,4 @@
-name: Python package
+name: Build
 
 on: [push]
 
@@ -22,5 +22,8 @@ jobs:
         pip install flake8 pytest
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
     - name: Test with pytest
+      env:
+        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
       run: |
-        pytest
+        coverage run -m pytest
+        codecov

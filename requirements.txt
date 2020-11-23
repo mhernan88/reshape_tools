@@ -4,3 +4,5 @@ pytest
 black
 tox
 nptyping
+coverage
+mypy
