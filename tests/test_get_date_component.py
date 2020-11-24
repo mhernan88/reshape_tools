@@ -1,6 +1,6 @@
 import numpy as np
 
-from reshape_tools.get_date_component import get_date_component
+from reshape_tools.make_recurrent import get_date_component
 from sample_data.make_sample_data import sample_data1, sample_data2
 
 
