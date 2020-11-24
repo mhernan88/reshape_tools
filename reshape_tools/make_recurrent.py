@@ -3,6 +3,8 @@ import pandas as pd
 from warnings import warn
 from nptyping import NDArray
 from typing import Any, Optional
+from logging import Logger
+from reshape_logging.loggers import CustomLogger
 
 
 GDC_TRANSFORMATIONS = {
@@ -38,6 +40,7 @@ def make_recurrent(
     drop_order_by: bool = True,
     drop_partition_by: bool = True,
     ascending: bool = True,
+    logger: Optional[Logger] = None,
 ) -> Optional[NDArray[(Any, Any, Any)]]:
     """Converts a 2-dimensional dataframe into a 3-dimensional recurrent.
 
@@ -58,6 +61,8 @@ def make_recurrent(
 
     # Set up some variables we'll use later.
     arrs = []
+    if df.shape[0] == 0:
+        raise ValueError("An empty dataframe was passed to make_recurrent()")
     df = df.sort_values(order_by, ascending=ascending)
     df_colnames = ", ".join([col for col in df.columns.values])
     order_ixs = [ix for ix, val in enumerate(df.columns.values) if order_by == val]
@@ -73,10 +78,13 @@ def make_recurrent(
             raise ValueError(
                 f"partition_by column {partition_by} was not None, but was not found in colnames {df_colnames}"
             )
-    order_ix = order_ixs[0]
+    # order_ix = order_ixs[0]
 
     # Iterate over rows and reshape.
+    if logger is not None:
+        logger.info(f"Processing a dataframe of size {df.shape}")
     for ix, row in df.iterrows():
+
         if ix + time_window > df.shape[0]:
             break  # Breaks if no more rows are available.
 
@@ -93,6 +101,8 @@ def make_recurrent(
         if drop_partition_by and partition_by is not None:
             sub_df = sub_df.drop(partition_by, axis=1)
         arr = sub_df.values
+        if logger is not None:
+            logger.debug(f"Iteration at row {ix} of {df.shape[0]} produced an array of size {arr.shape}")
         arrs.append(arr.reshape(1, -1, arr.shape[1]))
 
     if len(arrs) == 0:
