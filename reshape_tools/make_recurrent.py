@@ -69,5 +69,4 @@ def make_recurrent(
         arr = sub_df.values
         arrs.append(arr.reshape(1, -1, arr.shape[1]))
 
-    # return np.expand_dims(np.concatenate(arrs, axis=0), 0)
     return np.concatenate(arrs, axis=0)

@@ -1,0 +1,13 @@
+FROM python:3.7
+
+WORKDIR /app
+COPY requirements.txt .
+RUN pip install -r requirements.txt
+
+COPY setup.py .
+COPY reshape_tools reshape_tools
+COPY sample_data sample_data
+COPY tests test
+
+RUN pip install .
+CMD ["pytest"]
