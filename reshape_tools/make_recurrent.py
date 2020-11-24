@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+from warnings import warn
 from nptyping import NDArray
 from typing import Any, Optional
 
@@ -37,7 +38,7 @@ def make_recurrent(
     drop_order_by: bool = True,
     drop_partition_by: bool = True,
     ascending: bool = True,
-) -> NDArray[(Any, Any, Any)]:
+) -> Optional[NDArray[(Any, Any, Any)]]:
     """Converts a 2-dimensional dataframe into a 3-dimensional recurrent.
 
     Args:
@@ -94,4 +95,7 @@ def make_recurrent(
         arr = sub_df.values
         arrs.append(arr.reshape(1, -1, arr.shape[1]))
 
+    if len(arrs) == 0:
+        warn(f"in make_recurrent(), partition key {partition_by} yielded 0 arrays")
+        return None
     return np.concatenate(arrs, axis=0)
