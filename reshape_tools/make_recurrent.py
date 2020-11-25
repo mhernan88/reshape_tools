@@ -98,6 +98,6 @@ def make_recurrent(
         arrs.append(arr.reshape(1, -1, arr.shape[1]))
 
     if len(arrs) == 0:
-        warn(f"in make_recurrent(), partition key {partition_by} yielded 0 arrays")
+        print(f"in make_recurrent(), partition key {partition_by} yielded 0 arrays")
         return None
     return np.concatenate(arrs, axis=0)
