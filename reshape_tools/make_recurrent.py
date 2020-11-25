@@ -40,7 +40,6 @@ def make_recurrent(
     drop_order_by: bool = True,
     drop_partition_by: bool = True,
     ascending: bool = True,
-    logger: Optional[Logger] = None,
 ) -> Optional[NDArray[(Any, Any, Any)]]:
     """Converts a 2-dimensional dataframe into a 3-dimensional recurrent.
 
@@ -81,8 +80,8 @@ def make_recurrent(
     # order_ix = order_ixs[0]
 
     # Iterate over rows and reshape.
-    if logger is not None:
-        logger.info(f"Processing a dataframe of size {df.shape}")
+    # if logger is not None:
+        # logger.info(f"Processing a dataframe of size {df.shape}")
     for ix, row in df.iterrows():
 
         if ix + time_window > df.shape[0]:
@@ -101,8 +100,8 @@ def make_recurrent(
         if drop_partition_by and partition_by is not None:
             sub_df = sub_df.drop(partition_by, axis=1)
         arr = sub_df.values
-        if logger is not None:
-            logger.debug(f"Iteration at row {ix} of {df.shape[0]} produced an array of size {arr.shape}")
+        # if logger is not None:
+            # logger.debug(f"Iteration at row {ix} of {df.shape[0]} produced an array of size {arr.shape}")
         arrs.append(arr.reshape(1, -1, arr.shape[1]))
 
     if len(arrs) == 0:
