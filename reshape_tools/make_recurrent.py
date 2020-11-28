@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 from nptyping import NDArray
 from typing import Any, Optional
+from warnings import warn
 
 
 GDC_TRANSFORMATIONS = {
@@ -38,6 +39,7 @@ def make_recurrent(
     drop_partition_by: bool = True,
     ascending: bool = True,
     verbose: bool = False,
+    strict: bool = False,
 ) -> Optional[NDArray[(Any, Any, Any)]]:
     """Converts a 2-dimensional dataframe into a 3-dimensional recurrent.
 
@@ -105,5 +107,8 @@ def make_recurrent(
         arrs.append(arr.reshape(1, -1, arr.shape[1]))
 
     if len(arrs) == 0:
-        raise Exception(f"in make_recurrent(), partition key {partition_by} yielded 0 arrays")
+        if strict:
+            raise Exception(f"in make_recurrent(), partition key {partition_by} yielded 0 arrays")
+        else:
+            warn(f"in make_recurrent(), partition key {partition_by} yielded 0 arrays")
     return np.concatenate(arrs, axis=0)
