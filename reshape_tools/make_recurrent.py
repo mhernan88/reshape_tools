@@ -111,4 +111,5 @@ def make_recurrent(
             raise Exception(f"in make_recurrent(), partition key {partition_by} yielded 0 arrays")
         else:
             warn(f"in make_recurrent(), partition key {partition_by} yielded 0 arrays")
+            return None
     return np.concatenate(arrs, axis=0)
