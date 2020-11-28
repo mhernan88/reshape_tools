@@ -1,10 +1,7 @@
 import numpy as np
 import pandas as pd
-from warnings import warn
 from nptyping import NDArray
 from typing import Any, Optional
-from logging import Logger
-from reshape_logging.loggers import CustomLogger
 
 
 GDC_TRANSFORMATIONS = {
@@ -63,6 +60,7 @@ def make_recurrent(
     if df.shape[0] == 0:
         raise ValueError("An empty dataframe was passed to make_recurrent()")
     df = df.sort_values(order_by, ascending=ascending)
+    assert df.shape[0] > 0
     df_colnames = ", ".join([col for col in df.columns.values])
     order_ixs = [ix for ix, val in enumerate(df.columns.values) if order_by == val]
 
@@ -84,6 +82,7 @@ def make_recurrent(
 
         # Grab a chunk of rows equal to teh size of the time_window.
         sub_df = df.iloc[ix : ix + time_window, :]
+        assert sub_df.shape[0] > 0
 
         if partition_by is not None:
             if not (
@@ -98,6 +97,5 @@ def make_recurrent(
         arrs.append(arr.reshape(1, -1, arr.shape[1]))
 
     if len(arrs) == 0:
-        print(f"in make_recurrent(), partition key {partition_by} yielded 0 arrays")
-        return None
+        raise Exception(f"in make_recurrent(), partition key {partition_by} yielded 0 arrays")
     return np.concatenate(arrs, axis=0)
