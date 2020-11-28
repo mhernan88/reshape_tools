@@ -82,7 +82,7 @@ def make_recurrent(
     for ix, row in df.iterrows():
         if ix + time_window > df.shape[0]:
             if verbose:
-                print("No remaining full time windows in dataframe. Ending")
+                print(f"No remaining full time windows in dataframe of shape {df.shape}. Ending")
             break  # Breaks if no more rows are available.
 
         # Grab a chunk of rows equal to teh size of the time_window.
