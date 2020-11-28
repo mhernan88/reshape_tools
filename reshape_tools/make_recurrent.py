@@ -88,11 +88,12 @@ def make_recurrent(
         assert sub_df.shape[0] > 0
 
         if partition_by is not None:
+            partition_by_values = sub_df[partition_by].values
             if not (
-                sub_df[partition_by].values[0] == sub_df[partition_by].values
+                sub_df[partition_by].values[0] == partition_by_values
             ).all():
                 if verbose:
-                    print("Partition condition failed. Skipping to next window.")
+                    print(f"Partition condition failed. Skipping to next window. Unique partition_by values in sub_df included: {', '.join(np.unique(partition_by_values))}")
                 continue  # If we're using partition_by, then skip if any value of the partition column is different.
         if drop_order_by:
             sub_df = sub_df.drop(order_by, axis=1)
