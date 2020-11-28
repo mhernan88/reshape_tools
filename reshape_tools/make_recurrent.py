@@ -37,6 +37,7 @@ def make_recurrent(
     drop_order_by: bool = True,
     drop_partition_by: bool = True,
     ascending: bool = True,
+    verbose: bool = False,
 ) -> Optional[NDArray[(Any, Any, Any)]]:
     """Converts a 2-dimensional dataframe into a 3-dimensional recurrent.
 
@@ -78,6 +79,8 @@ def make_recurrent(
 
     for ix, row in df.iterrows():
         if ix + time_window > df.shape[0]:
+            if verbose:
+                print("No remaining full time windows in dataframe. Ending")
             break  # Breaks if no more rows are available.
 
         # Grab a chunk of rows equal to teh size of the time_window.
@@ -88,11 +91,15 @@ def make_recurrent(
             if not (
                 sub_df[partition_by].values[0] == sub_df[partition_by].values
             ).all():
+                if verbose:
+                    print("Partition condition failed. Skipping to next window.")
                 continue  # If we're using partition_by, then skip if any value of the partition column is different.
         if drop_order_by:
             sub_df = sub_df.drop(order_by, axis=1)
         if drop_partition_by and partition_by is not None:
             sub_df = sub_df.drop(partition_by, axis=1)
+        if verbose:
+            print("Adding row to array.")
         arr = sub_df.values
         arrs.append(arr.reshape(1, -1, arr.shape[1]))
 
