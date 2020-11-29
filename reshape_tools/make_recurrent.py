@@ -32,6 +32,8 @@ def get_date_component(dates: pd.Series, component: str) -> pd.Series:
         A series of the components.
     """
     gdc_transformation = GDC_TRANSFORMATIONS[component.lower()]
+    if np.array_equal(dates, dates.astype(int)):
+        dates = pd.to_datetime(dates, unit='s')
     periods = gdc_transformation(dates)
     return periods.astype(str)
 
