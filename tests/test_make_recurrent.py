@@ -12,6 +12,8 @@ def check_results(
     n_recurrent_samples: int,
     partition_by: Optional[str] = None,
 ):
+    assert data_input is not None
+    assert output is not None
 
     if partition_by is not None:
         n_unique = len(np.unique(data_input[partition_by]))
@@ -31,7 +33,7 @@ def test_make_recurrent_no_partitioning1():
     N_RECURRENT_SAMPLES = 3
 
     df = sample_data1()
-    arr = make_recurrent(df, N_RECURRENT_SAMPLES, ORDER_BY)
+    arr, y = make_recurrent(df, N_RECURRENT_SAMPLES, ORDER_BY, verbose=True, price_column="val1", time_threshold=86400)
     check_results(arr, df, N_RECURRENT_SAMPLES)
 
 
@@ -40,7 +42,7 @@ def test_make_recurrent_no_partitioning2():
     N_RECURRENT_SAMPLES = 5
 
     df = sample_data1()
-    arr = make_recurrent(df, N_RECURRENT_SAMPLES, ORDER_BY)
+    arr, y = make_recurrent(df, N_RECURRENT_SAMPLES, ORDER_BY, verbose=True, price_column="val1", time_threshold=86400)
     check_results(arr, df, N_RECURRENT_SAMPLES)
 
 
@@ -49,7 +51,7 @@ def test_make_recurrent_no_partitioning3():
     N_RECURRENT_SAMPLES = 3
 
     df = sample_data2()
-    arr = make_recurrent(df, N_RECURRENT_SAMPLES, ORDER_BY)
+    arr, y = make_recurrent(df, N_RECURRENT_SAMPLES, ORDER_BY, verbose=True, price_column="val1", time_threshold=86400)
     check_results(arr, df, N_RECURRENT_SAMPLES)
 
 
@@ -58,7 +60,7 @@ def test_make_recurrent_no_partitioning4():
     N_RECURRENT_SAMPLES = 5
 
     df = sample_data2()
-    arr = make_recurrent(df, N_RECURRENT_SAMPLES, ORDER_BY)
+    arr, y = make_recurrent(df, N_RECURRENT_SAMPLES, ORDER_BY, verbose=True, price_column="val1", time_threshold=86400)
     check_results(arr, df, N_RECURRENT_SAMPLES)
 
 
@@ -69,7 +71,7 @@ def test_make_recurrent_partitioning1():
 
     df = sample_data1()
     df["month"] = pd.to_datetime(df["times"]).dt.to_period("M")
-    arr = make_recurrent(df, N_RECURRENT_SAMPLES, ORDER_BY, PARTITION_BY)
+    arr, y = make_recurrent(df, N_RECURRENT_SAMPLES, ORDER_BY, PARTITION_BY, verbose=True, price_column="val1", time_threshold=86400)
     check_results(arr, df, N_RECURRENT_SAMPLES, PARTITION_BY)
 
 
@@ -80,7 +82,7 @@ def test_make_recurrent_partitioning2():
 
     df = sample_data1()
     df[PARTITION_BY] = pd.to_datetime(df["times"]).dt.to_period("M")
-    arr = make_recurrent(df, N_RECURRENT_SAMPLES, ORDER_BY, PARTITION_BY)
+    arr, y = make_recurrent(df, N_RECURRENT_SAMPLES, ORDER_BY, PARTITION_BY, verbose=True, price_column="val1", time_threshold=86400)
     check_results(arr, df, N_RECURRENT_SAMPLES, PARTITION_BY)
 
 
@@ -91,7 +93,7 @@ def test_make_recurrent_partitioning3():
 
     df = sample_data1()
     df[PARTITION_BY] = pd.to_datetime(df["times"]).dt.to_period("M")
-    arr = make_recurrent(df, N_RECURRENT_SAMPLES, ORDER_BY, PARTITION_BY)
+    arr, y = make_recurrent(df, N_RECURRENT_SAMPLES, ORDER_BY, PARTITION_BY, verbose=True, price_column="val1", time_threshold=86400)
     check_results(arr, df, N_RECURRENT_SAMPLES, PARTITION_BY)
 
 
@@ -102,7 +104,7 @@ def test_make_recurrent_partitioning4():
 
     df = sample_data2()
     df[PARTITION_BY] = pd.to_datetime(df["times"]).dt.to_period("D")
-    arr = make_recurrent(df, N_RECURRENT_SAMPLES, ORDER_BY, PARTITION_BY)
+    arr, y = make_recurrent(df, N_RECURRENT_SAMPLES, ORDER_BY, PARTITION_BY, verbose=True, price_column="val1", time_threshold=86400)
     check_results(arr, df, N_RECURRENT_SAMPLES, PARTITION_BY)
 
 
@@ -113,7 +115,7 @@ def test_make_recurrent_partitioning5():
 
     df = sample_data2()
     df[PARTITION_BY] = pd.to_datetime(df["times"]).dt.to_period("D")
-    arr = make_recurrent(df, N_RECURRENT_SAMPLES, ORDER_BY, PARTITION_BY)
+    arr, y = make_recurrent(df, N_RECURRENT_SAMPLES, ORDER_BY, PARTITION_BY, verbose=True, price_column="val1", time_threshold=86400)
     check_results(arr, df, N_RECURRENT_SAMPLES, PARTITION_BY)
 
 
@@ -124,5 +126,5 @@ def test_make_recurrent_partitioning6():
 
     df = sample_data2()
     df[PARTITION_BY] = pd.to_datetime(df["times"]).dt.to_period("D")
-    arr = make_recurrent(df, N_RECURRENT_SAMPLES, ORDER_BY, PARTITION_BY)
+    arr, y = make_recurrent(df, N_RECURRENT_SAMPLES, ORDER_BY, PARTITION_BY, verbose=True, price_column="val1", time_threshold=86400)
     check_results(arr, df, N_RECURRENT_SAMPLES, PARTITION_BY)

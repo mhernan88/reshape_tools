@@ -18,8 +18,9 @@ def sample_data1() -> pd.DataFrame:
 
     val1 = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
     val2 = [20, 40, 60, 80, 100, 120, 140, 160, 180, 200]
-
-    return pd.DataFrame({"times": times, "val1": val1, "val2": val2})
+    out = pd.DataFrame({"times": times, "val1": val1, "val2": val2})
+    out["times"] = (out["times"] - datetime(1970, 1, 1)).dt.total_seconds()
+    return out
 
 
 def sample_data2() -> pd.DataFrame:
@@ -38,5 +39,6 @@ def sample_data2() -> pd.DataFrame:
 
     val1 = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
     val2 = [20, 40, 60, 80, 100, 120, 140, 160, 180, 200]
-
-    return pd.DataFrame({"times": times, "val1": val1, "val2": val2})
+    out = pd.DataFrame({"times": times, "val1": val1, "val2": val2})
+    out["times"] = (out["times"] - datetime(1970, 1, 1)).dt.total_seconds()
+    return out
